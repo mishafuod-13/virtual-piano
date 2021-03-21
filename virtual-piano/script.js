@@ -11,8 +11,9 @@ class AudioElemCollection    { // declared a separate class so as not to dirty t
 
     buildAudioElement (elenname){
         const audioelem  = new Audio;
-        audioelem.src = this.path+elenname+this.format;
-        this.audiocollection[elenname] = audioelem;
+            audioelem.src = this.path+elenname+this.format;
+            this.audiocollection[elenname] = audioelem;
+        return audioelem;
     }
 
 
@@ -23,21 +24,65 @@ class AudioElemCollection    { // declared a separate class so as not to dirty t
 
 }
 
-const audioElems = new AudioElemCollection ();  
+            class Controller  {
+                constructor () {
+                    this.class = "Controller";
+                    this.linkList = {};
+                }
+
+                addLinks (link, item) {
+                    this.linkList[link] = item;
+                    return this;
+                }
+            }
+
+
+
+            const audioElems = new AudioElemCollection (); // class for work on audioelements
+            const keyList = new Controller();// class for work on keypad
+
+
+
 
     function keyClick (EO)  {
         EO=EO||window.event;
-
         let key=EO.target||EO.srcElement;
 
-        
+        let note = key.dataset.note;
+        audioElems.clickSound(note);
 
-        console.log (key);
+        console.log (key.dataset);
 
-    }     
+    }
+
+    function pendMouseLeave (e) {
+
+    }
+    
+
+
+
+function dataSet (htmlcol){
+
+    htmlcol.forEach((item) =>  {
+        console.log (item.dataset)
+
+        if (item.dataset) {
+            let note = item.dataset.note;
+            let key = item.dataset.letter;
+
+            let audio = audioElems.buildAudioElement(note);
+
+            keyList.addLinks(key,audio);
+            console.log(keyList)
+        }
+
+    });
+}
 
 
   function switchFullScreen () {
+
     let fullscreenEnabled = document.fullscreenElement;
 
     const htmlelem = document.documentElement;
@@ -52,16 +97,27 @@ const audioElems = new AudioElemCollection ();
     }
     
 
-
-
-
     
-const piano = document.querySelector(".piano");
+const piano = document.querySelector(".piano"); //div - wrapper for keys
 
-piano.addEventListener('click',keyClick,false);
+const pianoKeys = document.querySelectorAll (".piano-key"); // keys
+
+
+
+
+console.log (pianoKeys)
+
+piano.addEventListener('mousedown',keyClick,false);
 
 const butFull = document.querySelector(".fullscreen");
 ;
 
-butFull.onclick = switchFullScreen;
+
+
+        dataSet(pianoKeys);
+        butFull.onclick = switchFullScreen;
+        console.log (audioElems, keyList)
+
+
+
 
