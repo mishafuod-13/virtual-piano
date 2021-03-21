@@ -41,23 +41,52 @@ class AudioElemCollection    { // declared a separate class so as not to dirty t
             const audioElems = new AudioElemCollection (); // class for work on audioelements
             const keyList = new Controller();// class for work on keypad
 
+           // function addClassList ()
 
+
+            function pendMouseLeave (EO) {
+                EO=EO||window.event;
+                let e = EO.target||EO.srcElement;
+
+                console.log (e.dataset.note);
+
+                if (e.dataset.note!==undefined) {
+                    audioElems.clickSound(e.dataset.note)
+                }
+                
+        
+            }
+
+            function removerListeners (EO) {
+                EO=EO||window.event;
+                //здесь добавить функцию
+                console.log (EO)
+                piano.removeEventListener('mouseover',pendMouseLeave,false);
+                piano.removeEventListener('mouseup',removerListeners,false);
+
+        
+            }
 
 
     function keyClick (EO)  {
         EO=EO||window.event;
+
         let key=EO.target||EO.srcElement;
 
         let note = key.dataset.note;
+
         audioElems.clickSound(note);
+        
+        piano.addEventListener('mouseover',pendMouseLeave,false);
+
+        piano.addEventListener('mouseup',removerListeners,false);
+
+        listener;
 
         console.log (key.dataset);
 
     }
 
-    function pendMouseLeave (e) {
-
-    }
     
 
 
