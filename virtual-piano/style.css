@@ -9,6 +9,8 @@ a:focus {
 }
 html {
   background: #313940;
+  width: 100%;
+  height: 100%;
 }
 body {
   min-height: 100vh;
@@ -80,7 +82,7 @@ body {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: 270px;
+  height: 100%;
   max-width: 560px;
   margin: 0 auto 60px;
 }
