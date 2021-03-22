@@ -28,6 +28,7 @@ class Controller  {   //other class  for keypad
     constructor ()   {
         this.class = "Controller";
         this.linkList = {};
+        this.active = {};
     }
 
     addLinks (link, item)  {
@@ -53,9 +54,7 @@ function addClassOrFill (elem,newval,newclass) {    //null if you dont have piec
 
 
 function removeClass(elem, oldclass)  {
-
     elem.classList.remove(""+oldclass);
-
 }
 
 
@@ -90,7 +89,6 @@ function removeListeners (EO) {
     document.body.removeEventListener('mouseup',removeListeners,false);
     removeClass(key, "piano-key-active");
 
-
 }
 
 
@@ -108,7 +106,6 @@ function clickKey (EO)  { // base function for mouse events
         document.body.addEventListener('mouseup',removeListeners,false);
 
     }
-
     
 }
 
@@ -117,11 +114,11 @@ function setData (htmlcol) {    //writes data from html-collection (piano) to cl
 
     htmlcol.forEach((item) =>  {
 
-        if (item.dataset) {
+        if (item.dataset.note!==undefined) {
             let note = item.dataset.note;
             let key = item.dataset.letter;
             let audio = audioElems.buildAudioElement(note);
-            keyList.addLinks(key,audio);
+            keyList.addLinks(key,note);
         }
 
     });
@@ -166,16 +163,71 @@ function changeInscript (EO) {
     EO=EO||window.event;       
     let button = EO.target||EO.srcElement;
     const butInscript = document.querySelectorAll(".btn");
-    console.log (button)
+
     if (button === butWrap){
         return
     }
     if (!button.classList.contains('btn-active')){
         button.classList.add ("btn-active");
         inscripter(button);
+    }    
+    
+}
+
+function classListToogle (datanotes) {
+
+    pianoKeys.forEach((item) => {
+        if (item.dataset.note===datanotes) {
+            item.classList.toggle("piano-key-active");
+        }
+    });
+}
+
+function removeListenKeys (EO) {
+    
+    EO=EO||window.event;
+    let target = EO.target||EO.srcElement;
+    
+
+    let code = (EO.code).split("Key").join("");
+    let keyLink = keyList.linkList[code];
+
+    if (keyLink!==undefined) {
+
+        classListToogle(keyLink);
+        keyList.active[keyLink] = false;
+
+         for (let item in keyList.active) {
+             if (keyList.active[item]){
+                 return;
+             }
+         }
+
+        target.removeEventListener("keyup",removeListenKeys);
+
+    }
+}
+
+
+function listenKeys (EO) {
+
+    EO=EO||window.event;      
+
+    let code = (EO.code).split("Key").join("");
+    let keyLink = keyList.linkList[code];
+
+    if (keyList.active[keyLink]===true){
+        return;
     }
     
-    
+    if (keyLink!==undefined){
+        audioElems.clickSound(keyLink);
+        classListToogle(keyLink);
+        window.addEventListener("keyup",removeListenKeys);
+        keyList.active[keyLink] = true;
+        
+    }
+
 }
 
 
@@ -196,6 +248,10 @@ const butWrap = document.querySelector(".btn-container");
 piano.addEventListener('mousedown',clickKey,false);
 
 butWrap.addEventListener("click", changeInscript, false);
+
+window.addEventListener("keypress", listenKeys, false);
+
+
 
 
 
