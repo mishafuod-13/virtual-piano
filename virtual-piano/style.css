@@ -85,7 +85,17 @@ body {
   height: 100%;
   max-width: 560px;
   margin: 0 auto 60px;
+  content: attr(data-letter) !important;
 }
+.piano-letter > .piano-key::before {
+  transition: 0.2s;
+  content: attr(data-letter) !important;
+} 
+.piano-letter> .piano-key::after {
+  transition: 0.2s;
+  content: attr(data-letter) !important;
+}
+
 .piano-key {
   position: relative;
   width: 80px;
