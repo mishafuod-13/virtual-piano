@@ -37,7 +37,6 @@ class Controller  {   //other class  for keypad
      }
 }
 
-
 const audioElems = new AudioElemCollection ();          // class for work on audioelements
 const keyList = new Controller();         // class for work on keypad
 
@@ -52,11 +51,9 @@ function addClassOrFill (elem,newval,newclass) {    //null if you dont have piec
     }
 }
 
-
 function removeClass(elem, oldclass)  {
     elem.classList.remove(""+oldclass);
 }
-
 
 function removeListenerMouse (EO) {            //functions-listeners and remove-listeners on mouseivent
     EO=EO||window.event;
@@ -80,7 +77,6 @@ function pendMouseLeave (EO) {
     }
 }
 
-
 function removeListeners (EO) {
     EO=EO||window.event;
     let key = EO.target||EO.srcElement;
@@ -90,7 +86,6 @@ function removeListeners (EO) {
     removeClass(key, "piano-key-active");
 
 }
-
 
 function clickKey (EO)  { // base function for mouse events
     EO=EO||window.event;       
@@ -109,7 +104,6 @@ function clickKey (EO)  { // base function for mouse events
     
 }
 
-
 function setData (htmlcol) {    //writes data from html-collection (piano) to class objects
 
     htmlcol.forEach((item) =>  {
@@ -123,7 +117,6 @@ function setData (htmlcol) {    //writes data from html-collection (piano) to cl
 
     });
 }
-
 
   function switchFullScreen () {    //switch fullscreen
 
@@ -160,6 +153,7 @@ function inscripter (changelem) {        // switchers for inscription
 
 
 function changeInscript (EO) {
+
     EO=EO||window.event;       
     let button = EO.target||EO.srcElement;
     const butInscript = document.querySelectorAll(".btn");
@@ -187,7 +181,6 @@ function removeListenKeys (EO) {  //remove keys-listeners
     
     EO=EO||window.event;
     
-
     let code = (EO.code).split("Key").join("");
     let keyLink = keyList.linkList[code];
 
@@ -226,7 +219,6 @@ function listenKeys (EO) {
         
     }
 }
-
 
 const pianoKeys = document.querySelectorAll(".piano-key");    // basic constans
 
