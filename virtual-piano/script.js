@@ -24,74 +24,96 @@ class AudioElemCollection    { // declared a separate class so as not to dirty t
 
 }
 
-            class Controller  {
-                constructor () {
-                    this.class = "Controller";
-                    this.linkList = {};
-                }
+class Controller  {   //other class  for keypad 
+    constructor ()   {
+        this.class = "Controller";
+        this.linkList = {};
+    }
 
-                addLinks (link, item) {
-                    this.linkList[link] = item;
-                    return this;
-                }
-            }
-
-
-
-            const audioElems = new AudioElemCollection (); // class for work on audioelements
-            const keyList = new Controller();// class for work on keypad
-
-           // function addClassList ()
+    addLinks (link, item)  {
+        this.linkList[link] = item;
+        return this;
+     }
+}
 
 
-            function pendMouseLeave (EO) {
-                EO=EO||window.event;
-                let e = EO.target||EO.srcElement;
-
-                console.log (e.dataset.note);
-
-                if (e.dataset.note!==undefined) {
-                    audioElems.clickSound(e.dataset.note)
-                }
-                
-        
-            }
-
-            function removerListeners (EO) {
-                EO=EO||window.event;
-                //здесь добавить функцию
-                console.log (EO)
-                piano.removeEventListener('mouseover',pendMouseLeave,false);
-                piano.removeEventListener('mouseup',removerListeners,false);
-
-        
-            }
+const audioElems = new AudioElemCollection ();          // class for work on audioelements
+const keyList = new Controller();         // class for work on keypad
 
 
-    function keyClick (EO)  {
-        EO=EO||window.event;
+function addClassOrFill (elem,newval,newclass) {    //null if you dont have piece of functionality:)
 
-        let key=EO.target||EO.srcElement;
+    if (newval!==null) {
+        elem.innerHTML = newval;
+    }
+    if (newclass!==null) {
+        elem.classList.add(""+newclass);
+    }
+}
 
-        let note = key.dataset.note;
 
-        audioElems.clickSound(note);
-        
+function removeClass(elem, oldclass)  {
+
+    elem.classList.remove(""+oldclass);
+
+}
+
+
+function removeListenerMouse (EO) {            //functions-listeners and remove-listeners on mouseivent
+    EO=EO||window.event;
+    let key = EO.target||EO.srcElement;        
+
+    if (key.dataset.note!==undefined) {
+        removeClass(key, "piano-key-active");
+        key.removeEventListener("mouseleave",removeListenerMouse);
+    }
+
+}
+
+function pendMouseLeave (EO) {
+    EO=EO||window.event;
+    let key = EO.target||EO.srcElement;
+
+    if (key.dataset.note!==undefined) {
+        audioElems.clickSound(key.dataset.note)
+        addClassOrFill (key, null,"piano-key-active");
+        key.addEventListener("mouseleave",removeListenerMouse);
+    }
+}
+
+
+function removeListeners (EO) {
+    EO=EO||window.event;
+    let key = EO.target||EO.srcElement;
+    
+    piano.removeEventListener('mouseover',pendMouseLeave,false);
+    document.body.removeEventListener('mouseup',removeListeners,false);
+    removeClass(key, "piano-key-active");
+
+
+}
+
+
+function clickKey (EO)  { // base function for mouse events
+    EO=EO||window.event;       
+
+    let key=EO.target||EO.srcElement; 
+    let note = key.dataset.note;  
+
+    if (note!==undefined)   {
+        audioElems.clickSound(note);  
+        addClassOrFill(key, null,"piano-key-active");
+        key.addEventListener("mouseleave",removeListenerMouse);
         piano.addEventListener('mouseover',pendMouseLeave,false);
-
-        piano.addEventListener('mouseup',removerListeners,false);
-
-        listener;
-
-        console.log (key.dataset);
+        document.body.addEventListener('mouseup',removeListeners,false);
 
     }
 
     
+}
 
 
-
-function dataSet (htmlcol){
+function setData (htmlcol) {    //writes data from html-collection (piano) to class objects
 
     htmlcol.forEach((item) =>  {
         console.log (item.dataset)
@@ -99,18 +121,15 @@ function dataSet (htmlcol){
         if (item.dataset) {
             let note = item.dataset.note;
             let key = item.dataset.letter;
-
             let audio = audioElems.buildAudioElement(note);
-
             keyList.addLinks(key,audio);
-            console.log(keyList)
         }
 
     });
 }
 
 
-  function switchFullScreen () {
+  function switchFullScreen () {    //switched fullscreen
 
     let fullscreenEnabled = document.fullscreenElement;
 
@@ -120,32 +139,29 @@ function dataSet (htmlcol){
             htmlelem.requestFullscreen();
             return;
         } else {
-            document.exitFullscreen()
+            document.exitFullscreen();
             return;
         }
     }
     
 
-    
-const piano = document.querySelector(".piano"); //div - wrapper for keys
-
-const pianoKeys = document.querySelectorAll (".piano-key"); // keys
 
 
 
 
-console.log (pianoKeys)
+const pianoKeys = document.querySelectorAll(".piano-key");
 
-piano.addEventListener('mousedown',keyClick,false);
+const piano = document.querySelector(".piano");
+
+piano.addEventListener('mousedown',clickKey,false);
 
 const butFull = document.querySelector(".fullscreen");
-;
 
 
 
-        dataSet(pianoKeys);
+
+        setData(pianoKeys);
         butFull.onclick = switchFullScreen;
-        console.log (audioElems, keyList)
 
 
 

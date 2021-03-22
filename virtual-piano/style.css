@@ -121,6 +121,10 @@ body {
   transform-origin: center top;
   margin: 0px;
 }
+.piano-key-active{
+  transform: scale(0.8,0.8);
+  background-color: cadetblue;
+}
 .piano-key.piano-key-active,
 .piano-key.sharp.piano-key-active {
   transform: scale(0.96);
