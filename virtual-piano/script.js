@@ -125,7 +125,7 @@ function setData (htmlcol) {    //writes data from html-collection (piano) to cl
 }
 
 
-  function switchFullScreen () {    //switched fullscreen
+  function switchFullScreen () {    //switch fullscreen
 
     let fullscreenEnabled = document.fullscreenElement;
 
@@ -140,7 +140,7 @@ function setData (htmlcol) {    //writes data from html-collection (piano) to cl
         }
 }
 
-function inscripter (changelem) {
+function inscripter (changelem) {        // switchers for inscription 
     const butNot = document.querySelector(".btn-notes");
     const butLet =  document.querySelector(".btn-letters");
     const keyssharp = document.querySelector(".keys-sharp");
@@ -174,7 +174,7 @@ function changeInscript (EO) {
     
 }
 
-function classListToogle (datanotes) {
+function classListToogle (datanotes) {          //switch class list for keys-ivent
 
     pianoKeys.forEach((item) => {
         if (item.dataset.note===datanotes) {
@@ -183,10 +183,9 @@ function classListToogle (datanotes) {
     });
 }
 
-function removeListenKeys (EO) {
+function removeListenKeys (EO) {  //remove keys-listeners
     
     EO=EO||window.event;
-    let target = EO.target||EO.srcElement;
     
 
     let code = (EO.code).split("Key").join("");
@@ -203,11 +202,10 @@ function removeListenKeys (EO) {
              }
          }
 
-        target.removeEventListener("keyup",removeListenKeys);
+        window.removeEventListener("keyup",removeListenKeys);
 
     }
 }
-
 
 function listenKeys (EO) {
 
@@ -216,7 +214,7 @@ function listenKeys (EO) {
     let code = (EO.code).split("Key").join("");
     let keyLink = keyList.linkList[code];
 
-    if (keyList.active[keyLink]===true){
+    if (keyList.active[keyLink]===true) {
         return;
     }
     
@@ -227,17 +225,10 @@ function listenKeys (EO) {
         keyList.active[keyLink] = true;
         
     }
-
 }
 
 
-    
-
-
-
-
-
-const pianoKeys = document.querySelectorAll(".piano-key");
+const pianoKeys = document.querySelectorAll(".piano-key");    // basic constans
 
 const piano = document.querySelector(".piano");
 
@@ -245,22 +236,12 @@ const butFull = document.querySelector(".fullscreen");
 
 const butWrap = document.querySelector(".btn-container");
 
-piano.addEventListener('mousedown',clickKey,false);
+piano.addEventListener('mousedown',clickKey,false);        // start listeners
 
 butWrap.addEventListener("click", changeInscript, false);
 
 window.addEventListener("keypress", listenKeys, false);
 
+setData(pianoKeys);        //write data in class - objects
 
-
-
-
-
-
-
-        setData(pianoKeys);
-        butFull.onclick = switchFullScreen;
-
-
-
-
+butFull.onclick = switchFullScreen;  
