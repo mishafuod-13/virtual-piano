@@ -1,2 +1,2 @@
-# mishafuod-13-JSFE2021Q1
-Private repository for @mishafuod-13
+# Virtual Piano
+JS - mini-project on RS- School 
